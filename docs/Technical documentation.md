@@ -1,3 +1,13 @@
+
+___
+[[#1. Введение]]
+[[#2. Стек технологий]]
+	[[#2.1. Серверная часть приложения]]
+	[[#2.2. Клиентская часть приложения]]
+[[#3. Структура приложения]]
+	[[#3.1. Архитектура приложения]]
+	[[#3.2. Архитектура БД]]
+___
 # 1. Введение
 ## 1.1. Краткое описание возможностей приложения
 **Voider.dev** - приложения для обучения начинающих программистов при помощи коротких уроков в игровом формате
@@ -288,9 +298,9 @@ erDiagram
 `POST api/auth/register`
 ```json
 {
-	"username": string,
-	"email": string,
-	"password": string
+	"username": "string",
+	"email": "string",
+	"password": "string"
 }
 ```
 
@@ -299,13 +309,13 @@ erDiagram
 {
 	"message": "user registered succsessfully",
 	"user": {
-		"id": number,
-		"username": string,
-		"email": string,
-		"created_at": timestamp,
-		"exp_points": 0,
-		"level": 0,
-		"days_streak": 0
+		"id": 00000000,
+		"username": "string",
+		"email": "string",
+		"created_at": "00:00:0000",
+		"exp_points": 00000000,
+		"level": 00000000,
+		"days_streak": 00000000
 	}
 }
 ```
@@ -314,8 +324,8 @@ erDiagram
 `POST api/auth/login`
 ```json
 {
-	"email": string,
-	"password": string
+	"email": "string",
+	"password": "string"
 }
 ```
 
@@ -324,14 +334,14 @@ erDiagram
 {
 	"message": "login successfull",
 	"user": {
-		"id": number,
-		"username": string,
-		"email": string,
-		"exp_points": number,
-		"level": number,
-		"avatar_url": string,
-		"days_streak": number,
-		"last_active_at": timestamp
+		"id": 00000000,
+		"username": "string",
+		"email": "string",
+		"exp_points": 00000000,
+		"level": 00000000,
+		"avatar_url": "string",
+		"days_streak": 00000000,
+		"last_active_at": "00:00:0000"
 	}
 }
 ```
@@ -341,26 +351,26 @@ erDiagram
 ```json
 {
 	"user_info": {
-		"id": number,
-		"username": string,
-		"level": number,
-		"exp_points": number,
-		"days_streak": number,
+		"id": 00000000,
+		"username": "string",
+		"level": 00000000,
+		"exp_points": 00000000,
+		"days_streak": 00000000,
 	},
 	"current_course": {
-		"id": number,
-		"title": string,
-		"progress_percentage": number,
+		"id": 00000000,
+		"title": "string",
+		"progress_percentage": 00000000,
 		"current_module":{
-			"id": number,
-			"title": string,
-			"order_index": number
+			"id": 00000000,
+			"title": "string",
+			"order_index": 00000000
 			"lessons": {
-				"id": number,
-				"order_index": number,
-				"repetition_required": number,
-				"repetition_done": number,
-				"is_complele": boolean
+				"id": 00000000,
+				"order_index": 00000000,
+				"repetition_required": 00000000,
+				"repetition_done": 00000000,
+				"is_complele": True
 			}
 		}
 	}
@@ -371,48 +381,48 @@ erDiagram
 `GET api/home/lessos?lesson_id=number`
 ```json
 {
-	"id": number,
-	"exercises_amount": number,
-	"current_repetition": number,
+	"id": 00000000,
+	"exercises_amount": 00000000,
+	"current_repetition": 00000000,
 	"exercises": [
 		"exersice_0": {
-			"id": number,
-			"exercise_type": string,
-			"exp_points": number,
-			"description": string,
+			"id": 00000000,
+			"exercise_type": "string",
+			"exp_points": 00000000,
+			"description": "string",
 			"answers": [
-				"answer_0": number,
-				"answer_1": number,
-				"answer_2": number,
-				"answer_x": number,
+				"answer_0": 00000000,
+				"answer_1": 00000000,
+				"answer_2": 00000000,
+				"answer_x": 00000000,
 				],
-			"correct_answer": number,
+			"correct_answer": 00000000,
 		},
 		"exersice_1": {
-			"id": number,
-			"exercise_type": string,
-			"exp_points": number,
-			"description": string,
+			"id": 00000000,
+			"exercise_type": "string",
+			"exp_points": 00000000,
+			"description": "string",
 			"answers": [
-				"answer_0": number,
-				"answer_1": number,
-				"answer_2": number,
-				"answer_x": number,
+				"answer_0": 00000000,
+				"answer_1": 00000000,
+				"answer_2": 00000000,
+				"answer_x": 00000000,
 				],
-			"correct_answer": number,
+			"correct_answer": 00000000,
 		},
 		"exersice_x": {
-			"id": number,
-			"exercise_type": string,
-			"exp_points": number,
-			"description": string,
+			"id": 00000000,
+			"exercise_type": "string",
+			"exp_points": 00000000,
+			"description": "string",
 			"answers": [
-				"answer_0": number,
-				"answer_1": number,
-				"answer_2": number,
-				"answer_x": number,
+				"answer_0": 00000000,
+				"answer_1": 00000000,
+				"answer_2": 00000000,
+				"answer_x": 00000000,
 			],
-			"correct_answer": number,
+			"correct_answer": 00000000,
 		},
 	],
 }
@@ -421,19 +431,19 @@ erDiagram
 `POST api/home/lesson`
 ```json
 {
-	"id": number,
-	"is_repetition_complete": boolean,
-	"current_repetition": number,
-	"exp_earned": number
+	"id": 00000000,
+	"is_repetition_complete": True,
+	"current_repetition": 00000000,
+	"exp_earned": 00000000
 }
 ```
 
 `200 Ok`
 ```json
 {
-	"id": number,
-	"is_complete": number,
-	"exp_earned": number,
+	"id": 00000000,
+	"is_complete": 00000000,
+	"exp_earned": 00000000,
 }
 ```
 
@@ -443,12 +453,12 @@ erDiagram
 ```json
 {
 	"user_info": {
-		"id": number,
-		"username": string,
-		"level": number,
-		"exp_points": number,
-		"days_streak": number,
-		"avatar_url": string,
+		"id": 00000000,
+		"username": "string",
+		"level": 00000000,
+		"exp_points": 00000000,
+		"days_streak": 00000000,
+		"avatar_url": "string",
 	},
 }
 ```
@@ -457,12 +467,12 @@ erDiagram
 ```json
 {
 	"user_info": {
-		"id": number,
-		"username": string,
-		"level": number,
-		"exp_points": number,
-		"days_streak": number,
-		"avatar_url": string,
+		"id": 00000000,
+		"username": "string",
+		"level": 00000000,
+		"exp_points": 00000000,
+		"days_streak": 00000000,
+		"avatar_url": "string",
 	},
 }
 ```
@@ -471,12 +481,12 @@ erDiagram
 ```json
 {
 	"user_info": {
-		"id": number,
-		"username": string,
-		"level": number,
-		"exp_points": number,
-		"days_streak": number,
-		"avatar_url": string,
+		"id": 00000000,
+		"username": "string",
+		"level": 00000000,
+		"exp_points": 00000000,
+		"days_streak": 00000000,
+		"avatar_url": "string",
 	},
 }
 ```
@@ -485,12 +495,12 @@ erDiagram
 `GET api/profile/achivements?user_id=number`
 ```json
 {
-	"id": number,
+	"id": 00000000,
 	"achemevents": [
-		number: [ // number - id достижения
-			"title": string,
-			"dexription": string,
-			"icon_url": string,
+		"achevement_id": [
+			"title": "string",
+			"dexription": "string",
+			"icon_url": "string",
 		]
 	]
 }
@@ -499,8 +509,8 @@ erDiagram
 `POST api/profile/achevements`
 ```json
 {
-	"id": number,
-	"user_id": number,
-	"is_earned": boolean,
+	"id": "string",
+	"user_id": 00000000,
+	"is_earned": True,
 }
 ```
