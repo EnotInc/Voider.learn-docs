@@ -1,6 +1,6 @@
 # 1. Введение
 ## 1.1. Краткое описание возможностей приложения
-**Voider.dev** - приложения для обучения начинающих программистов при помощи коротких уроков в игровом формате
+**Voider.learn** - приложения для обучения начинающих программистов при помощи коротких уроков в игровом формате
 
 # 2. Стек технологий
 ## 2.1. Серверная часть приложения
@@ -299,13 +299,13 @@ erDiagram
 {
 	"message": "user registered succsessfully",
 	"user": {
-		"id": 00000000,
+		"id": 99999999,
 		"username": "string",
 		"email": "string",
 		"created_at": "00:00:0000",
-		"exp_points": 00000000,
-		"level": 00000000,
-		"days_streak": 00000000
+		"exp_points": 99999999,
+		"level": 99999999,
+		"days_streak": 99999999
 	}
 }
 ```
@@ -324,13 +324,13 @@ erDiagram
 {
 	"message": "login successfull",
 	"user": {
-		"id": 00000000,
+		"id": 99999999,
 		"username": "string",
 		"email": "string",
-		"exp_points": 00000000,
-		"level": 00000000,
+		"exp_points": 99999999,
+		"level": 99999999,
 		"avatar_url": "string",
-		"days_streak": 00000000,
+		"days_streak": 99999999,
 		"last_active_at": "00:00:0000"
 	}
 }
@@ -341,26 +341,26 @@ erDiagram
 ```json
 {
 	"user_info": {
-		"id": 00000000,
+		"id": 99999999,
 		"username": "string",
-		"level": 00000000,
-		"exp_points": 00000000,
-		"days_streak": 00000000,
+		"level": 99999999,
+		"exp_points": 99999999,
+		"days_streak": 99999999,
 	},
 	"current_course": {
-		"id": 00000000,
+		"id": 99999999,
 		"title": "string",
-		"progress_percentage": 00000000,
+		"progress_percentage": 99999999,
 		"current_module":{
-			"id": 00000000,
+			"id": 99999999,
 			"title": "string",
-			"order_index": 00000000
+			"order_index": 99999999
 			"lessons": {
-				"id": 00000000,
-				"order_index": 00000000,
-				"repetition_required": 00000000,
-				"repetition_done": 00000000,
-				"is_complele": True
+				"id": 99999999,
+				"order_index": 99999999,
+				"repetition_required": 99999999,
+				"repetition_done": 99999999,
+				"is_complele": true
 			}
 		}
 	}
@@ -371,48 +371,48 @@ erDiagram
 `GET api/home/lessos?lesson_id=number`
 ```json
 {
-	"id": 00000000,
-	"exercises_amount": 00000000,
-	"current_repetition": 00000000,
+	"id": 99999999,
+	"exercises_amount": 99999999,
+	"current_repetition": 99999999,
 	"exercises": [
 		"exersice_0": {
-			"id": 00000000,
+			"id": 99999999,
 			"exercise_type": "string",
-			"exp_points": 00000000,
+			"exp_points": 99999999,
 			"description": "string",
 			"answers": [
-				"answer_0": 00000000,
-				"answer_1": 00000000,
-				"answer_2": 00000000,
-				"answer_x": 00000000,
+				"answer_0": 99999999,
+				"answer_1": 99999999,
+				"answer_2": 99999999,
+				"answer_x": 99999999,
 				],
-			"correct_answer": 00000000,
+			"correct_answer": 99999999,
 		},
 		"exersice_1": {
-			"id": 00000000,
+			"id": 99999999,
 			"exercise_type": "string",
-			"exp_points": 00000000,
+			"exp_points": 99999999,
 			"description": "string",
 			"answers": [
-				"answer_0": 00000000,
-				"answer_1": 00000000,
-				"answer_2": 00000000,
-				"answer_x": 00000000,
+				"answer_0": 99999999,
+				"answer_1": 99999999,
+				"answer_2": 99999999,
+				"answer_x": 99999999,
 				],
-			"correct_answer": 00000000,
+			"correct_answer": 99999999,
 		},
 		"exersice_x": {
-			"id": 00000000,
+			"id": 99999999,
 			"exercise_type": "string",
-			"exp_points": 00000000,
+			"exp_points": 99999999,
 			"description": "string",
 			"answers": [
-				"answer_0": 00000000,
-				"answer_1": 00000000,
-				"answer_2": 00000000,
-				"answer_x": 00000000,
+				"answer_0": 99999999,
+				"answer_1": 99999999,
+				"answer_2": 99999999,
+				"answer_x": 99999999,
 			],
-			"correct_answer": 00000000,
+			"correct_answer": 99999999,
 		},
 	],
 }
@@ -421,19 +421,19 @@ erDiagram
 `POST api/home/lesson`
 ```json
 {
-	"id": 00000000,
-	"is_repetition_complete": True,
-	"current_repetition": 00000000,
-	"exp_earned": 00000000
+	"id": 99999999,
+	"is_repetition_complete": true,
+	"current_repetition": 99999999,
+	"exp_earned": 99999999
 }
 ```
 
 `200 Ok`
 ```json
 {
-	"id": 00000000,
-	"is_complete": 00000000,
-	"exp_earned": 00000000,
+	"id": 99999999,
+	"is_complete": 99999999,
+	"exp_earned": 99999999,
 }
 ```
 
@@ -443,11 +443,11 @@ erDiagram
 ```json
 {
 	"user_info": {
-		"id": 00000000,
+		"id": 99999999,
 		"username": "string",
-		"level": 00000000,
-		"exp_points": 00000000,
-		"days_streak": 00000000,
+		"level": 99999999,
+		"exp_points": 99999999,
+		"days_streak": 99999999,
 		"avatar_url": "string",
 	},
 }
@@ -457,11 +457,11 @@ erDiagram
 ```json
 {
 	"user_info": {
-		"id": 00000000,
+		"id": 99999999,
 		"username": "string",
-		"level": 00000000,
-		"exp_points": 00000000,
-		"days_streak": 00000000,
+		"level": 99999999,
+		"exp_points": 99999999,
+		"days_streak": 99999999,
 		"avatar_url": "string",
 	},
 }
@@ -471,11 +471,11 @@ erDiagram
 ```json
 {
 	"user_info": {
-		"id": 00000000,
+		"id": 99999999,
 		"username": "string",
-		"level": 00000000,
-		"exp_points": 00000000,
-		"days_streak": 00000000,
+		"level": 99999999,
+		"exp_points": 99999999,
+		"days_streak": 99999999,
 		"avatar_url": "string",
 	},
 }
@@ -485,7 +485,7 @@ erDiagram
 `GET api/profile/achivements?user_id=number`
 ```json
 {
-	"id": 00000000,
+	"id": 99999999,
 	"achemevents": [
 		"achevement_id": [
 			"title": "string",
@@ -500,7 +500,7 @@ erDiagram
 ```json
 {
 	"id": "string",
-	"user_id": 00000000,
-	"is_earned": True,
+	"user_id": 99999999,
+	"is_earned": true,
 }
 ```
