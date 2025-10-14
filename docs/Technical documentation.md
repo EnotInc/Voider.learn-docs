@@ -39,6 +39,7 @@ CREATE TABLE users (
 	last_active_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	days_streak INTEGER DEFAULT 0,
 	avatar_url VARCHAR(500),
+	is_active BOOLEAN DEFAUTL TRUE
 );
 ```
 
@@ -285,7 +286,7 @@ erDiagram
 ### 3.2.1. Регистрация/вход
 
 **Регистрация нового пользователя**
-`POST api/auth/register`
+`POST api/v1/auth/register`
 ```json
 {
 	"username": "string",
@@ -311,7 +312,7 @@ erDiagram
 ```
 
 **Авторизация пользователя**
-`POST api/auth/login`
+`POST api/v1/auth/login`
 ```json
 {
 	"email": "string",
@@ -337,7 +338,7 @@ erDiagram
 ```
 ### 3.2.2. Главная страница
 **Дорожная карта**
-`GET api/home/roadmap?user_id=number`
+`GET api/v1/home/roadmap?user_id=number`
 ```json
 {
 	"user_info": {
@@ -368,7 +369,7 @@ erDiagram
 ```
 
 **Прохождение урока**
-`GET api/home/lessos?lesson_id=number`
+`GET api/v1/home/lessos?lesson_id=number`
 ```json
 {
 	"id": 99999999,
@@ -418,7 +419,7 @@ erDiagram
 }
 ```
 
-`POST api/home/lesson`
+`POST api/v1/home/lesson`
 ```json
 {
 	"id": 99999999,
@@ -439,7 +440,7 @@ erDiagram
 
 ### 3.2.3 Профиль пользователя
 **Профиль пользователя
-`GET api/profile?user_id=number`
+`GET api/v1/profile?user_id=number`
 ```json
 {
 	"user_info": {
@@ -453,7 +454,7 @@ erDiagram
 }
 ```
 
-`POST api/profile/update`
+`POST api/v1/profile/update`
 ```json
 {
 	"user_info": {
@@ -482,7 +483,7 @@ erDiagram
 ```
 
 **Достижения пользователя**
-`GET api/profile/achivements?user_id=number`
+`GET api/v1/profile/achivements?user_id=number`
 ```json
 {
 	"id": 99999999,
@@ -496,7 +497,7 @@ erDiagram
 }
 ```
 
-`POST api/profile/achevements`
+`POST api/v1/profile/achevements`
 ```json
 {
 	"id": "string",
