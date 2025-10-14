@@ -356,62 +356,101 @@ erDiagram
 			"id": 99999999,
 			"title": "string",
 			"order_index": 99999999
-			"lessons": {
-				"id": 99999999,
-				"order_index": 99999999,
-				"repetition_required": 99999999,
-				"repetition_done": 99999999,
-				"is_complele": true
-			}
+			"lessons": [
+				{
+					"id": 99999999,
+					"order_index": 99999999,
+					"repetition_required": 99999999,
+					"repetition_done": 99999999,
+					"is_complele": true
+				
+				},
+			]
 		}
 	}
 }
 ```
 
 **Прохождение урока**
-`GET api/v1/home/lessos?lesson_id=number`
+`GET api/v1/home/lessos/{lesson_id}`
 ```json
 {
 	"id": 99999999,
 	"exercises_amount": 99999999,
 	"current_repetition": 99999999,
 	"exercises": [
-		"exersice_0": {
+		{
 			"id": 99999999,
 			"exercise_type": "string",
 			"exp_points": 99999999,
 			"description": "string",
 			"answers": [
-				"answer_0": 99999999,
-				"answer_1": 99999999,
-				"answer_2": 99999999,
-				"answer_x": 99999999,
+				{
+					"id": 9999999999,
+					"answer": "string"
+				},
+				{
+					"id": 9999999999,
+					"answer": "string"
+				},
+				{
+					"id": 9999999999,
+					"answer": "string"
+				},
+				{
+					"id": 9999999999,
+					"answer": "string"
+				}
 				],
 			"correct_answer": 99999999,
 		},
-		"exersice_1": {
+		{
 			"id": 99999999,
 			"exercise_type": "string",
 			"exp_points": 99999999,
 			"description": "string",
 			"answers": [
-				"answer_0": 99999999,
-				"answer_1": 99999999,
-				"answer_2": 99999999,
-				"answer_x": 99999999,
+				{
+					"id": 9999999999,
+					"answer": "string"
+				},
+				{
+					"id": 9999999999,
+					"answer": "string"
+				},
+				{
+					"id": 9999999999,
+					"answer": "string"
+				},
+				{
+					"id": 9999999999,
+					"answer": "string"
+				}
 				],
 			"correct_answer": 99999999,
 		},
-		"exersice_x": {
+		{
 			"id": 99999999,
 			"exercise_type": "string",
 			"exp_points": 99999999,
 			"description": "string",
 			"answers": [
-				"answer_0": 99999999,
-				"answer_1": 99999999,
-				"answer_2": 99999999,
-				"answer_x": 99999999,
+				{
+					"id": 9999999999,
+					"answer": "string"
+				},
+				{
+					"id": 9999999999,
+					"answer": "string"
+				},
+				{
+					"id": 9999999999,
+					"answer": "string"
+				},
+				{
+					"id": 9999999999,
+					"answer": "string"
+				}
 			],
 			"correct_answer": 99999999,
 		},
@@ -454,7 +493,8 @@ erDiagram
 }
 ```
 
-`POST api/v1/profile/update`
+
+`PUT api/v1/profile`
 ```json
 {
 	"user_info": {
@@ -487,6 +527,36 @@ erDiagram
 ```json
 {
 	"id": 99999999,
+	"achimevents": [
+		{
+			"id": 99999999,
+			"title": "string",
+			"dexription": "string",
+			"icon_url": "string",
+		},
+		{
+			"id": 99999999,
+			"title": "string",
+			"dexription": "string",
+			"icon_url": "string",
+		}
+	]
+}
+```
+
+`PUT api/v1/profile/achevements`
+```json
+{
+	"id": 99999999,
+	"user_id": 99999999,
+	"is_earned": true,
+}
+```
+
+`200 Ok`
+```json
+{
+	"id": 99999999,
 	"achemevents": [
 		"achevement_id": [
 			"title": "string",
@@ -494,14 +564,5 @@ erDiagram
 			"icon_url": "string",
 		]
 	]
-}
-```
-
-`POST api/v1/profile/achevements`
-```json
-{
-	"id": "string",
-	"user_id": 99999999,
-	"is_earned": true,
 }
 ```
