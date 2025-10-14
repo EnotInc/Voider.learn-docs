@@ -1,8 +1,7 @@
 # Voider.dev docs
 
 В рамках проекта Voider.dev (рабочее название) необходимо вести следующие документы:
-- [[Voider.dev/docs/Technical documentation|Техническая документация]]
-- [[Technical assigment|Техническое задание]]
-
+- [Техническая документация](https://github.com/EnotInc/Voider.dev-docs/blob/master/docs/Technical%20documentation.md)
+- [Техническое задание](https://github.com/EnotInc/Voider.dev-docs/blob/master/docs/Technical%20assigment.md)
 
 **Дата последнего обновления**: 14.10.2025
