@@ -341,7 +341,7 @@ erDiagram
 ### 3.2.2. Главная страница
 **Дорожная карта**
 ```http
-GET api/v1/home/roadmap
+GET http://site/api/v1/home/roadmap
 Authorization: Bearer <token>
 ```
 
@@ -379,7 +379,7 @@ Authorization: Bearer <token>
 
 **Прохождение урока**
 ```http
-GET api/v1/home/lessos/{lesson_id}
+GET http://site/api/v1/home/lessos/{lesson_id}
 Authorization: Bearer <token>
 ```
 
@@ -469,7 +469,7 @@ Authorization: Bearer <token>
 ```
 
 ```http
-POST api/v1/home/lesson
+POST http://site/api/v1/home/lesson
 Authorization: Bearer <token>
 ```
 
@@ -494,7 +494,7 @@ Authorization: Bearer <token>
 ### 3.2.3 Профиль пользователя
 **Профиль пользователя**
 ```http
-GET api/v1/profile
+GET http://site/api/v1/profile
 Authorization: Bearer <token>
 ```
 
@@ -513,7 +513,7 @@ Authorization: Bearer <token>
 
 
 ```http
-PUT api/v1/profile
+PUT http://site/api/v1/profile
 Authorization: Bearer <token>
 ```
 
@@ -546,7 +546,7 @@ Authorization: Bearer <token>
 
 **Достижения пользователя**
 ```http
-GET api/v1/profile/achivements
+GET http://site/api/v1/profile/achivements
 Authorization: Bearer <token>
 ```
 ```json
@@ -570,7 +570,7 @@ Authorization: Bearer <token>
 ```
 
 ```http
-PUT api/v1/profile/achevements
+PUT http://site/api/v1/profile/achevements
 Authorization: Bearer <token>
 ```
 
