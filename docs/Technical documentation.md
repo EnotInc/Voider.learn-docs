@@ -593,48 +593,44 @@ Authorization: Bearer <token>
 
 ```json
 {
-	[
-		{``
-			"id": 99999999,
-			"title": "string",
-			"dexription": "string",
-			"icon_url": "string",
-		},
-		{
-			"id": 99999999,
-			"title": "string",
-			"dexription": "string",
-			"icon_url": "string",
-		}
-	]
+	{
+		"id": 99999999,
+		"title": "string",
+		"dexription": "string",
+		"icon_url": "string",
+	},
+	{
+		"id": 99999999,
+		"title": "string",
+		"dexription": "string",
+		"icon_url": "string",
+	}
 }
 ```
 
 ```http
-PUT http://site/api/v1/profile/achevements
+POST http://site/api/v1/profile/achivements
 Authorization: Bearer <token>
 ```
 
 ```json
 {
-	"user_id": 99999999,
+	"achivement_id": 99999999
 }
 ```
 
 `200 Ok`
 ```json
 {
-	[
-		{
-			"title": "string",
-			"dexription": "string",
-			"icon_url": "string",
-		},
-		{
-			"title": "string",
-			"dexription": "string",
-			"icon_url": "string",
-		}
-	]
+	{
+		"title": "string",
+		"dexription": "string",
+		"icon_url": "string",
+	},
+	{
+		"title": "string",
+		"dexription": "string",
+		"icon_url": "string",
+	}
 }
 ```
