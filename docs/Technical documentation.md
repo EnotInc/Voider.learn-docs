@@ -590,11 +590,11 @@ Authorization: Bearer <token>
 GET http://site/api/v1/profile/achivements
 Authorization: Bearer <token>
 ```
+
 ```json
 {
-	"id": 99999999,
-	"achimevents": [
-		{
+	[
+		{``
 			"id": 99999999,
 			"title": "string",
 			"dexription": "string",
@@ -617,22 +617,24 @@ Authorization: Bearer <token>
 
 ```json
 {
-	"id": 99999999,
 	"user_id": 99999999,
-	"is_earned": true,
 }
 ```
 
 `200 Ok`
 ```json
 {
-	"id": 99999999,
-	"achemevents": [
-		"achevement_id": [
+	[
+		{
 			"title": "string",
 			"dexription": "string",
 			"icon_url": "string",
-		]
+		},
+		{
+			"title": "string",
+			"dexription": "string",
+			"icon_url": "string",
+		}
 	]
 }
 ```
