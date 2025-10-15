@@ -286,7 +286,10 @@ erDiagram
 ### 3.2.1. Регистрация/вход
 
 **Регистрация нового пользователя**
-`POST api/v1/auth/register`
+```http
+POST http://site/api/v1/auth/register
+```
+
 ```json
 {
 	"username": "string",
@@ -313,7 +316,10 @@ erDiagram
 ```
 
 **Авторизация пользователя**
-`POST api/v1/auth/login`
+```http
+POST http://site/api/v1/auth/login
+```
+
 ```json
 {
 	"email": "string",
@@ -374,6 +380,40 @@ Authorization: Bearer <token>
 			]
 		}
 	}
+}
+```
+
+**Список курсов
+```http
+GET http://site/api/v1/home/courses
+Authorization: Bearer <token>
+```
+
+```json
+{
+	"courses_available":[
+		{
+			"id": 99999999,
+			"title": "string"
+		},
+		{
+			"id": 99999999,
+			"title": "string"
+		}
+	],
+	"user_courses": {
+		[
+			"id": 99999999,
+			"title": "string",
+				"course_progress": 99999999,
+			"is_current": true
+		],
+		[
+			"id": 99999999,
+			"title": "string",
+			"course_progress": 99999999,
+			"is_current": false
+		]
 }
 ```
 
