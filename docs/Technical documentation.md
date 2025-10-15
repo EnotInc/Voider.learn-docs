@@ -299,6 +299,7 @@ erDiagram
 ```json
 {
 	"message": "user registered succsessfully",
+	"token": "string"
 	"user": {
 		"id": 99999999,
 		"username": "string",
@@ -324,6 +325,7 @@ erDiagram
 ```json
 {
 	"message": "login successfull",
+	"token": "string"
 	"user": {
 		"id": 99999999,
 		"username": "string",
@@ -338,7 +340,11 @@ erDiagram
 ```
 ### 3.2.2. Главная страница
 **Дорожная карта**
-`GET api/v1/home/roadmap?user_id=number`
+```http
+GET api/v1/home/roadmap
+Authorization: Bearer <token>
+```
+
 ```json
 {
 	"user_info": {
@@ -372,7 +378,11 @@ erDiagram
 ```
 
 **Прохождение урока**
-`GET api/v1/home/lessos/{lesson_id}`
+```http
+GET api/v1/home/lessos/{lesson_id}
+Authorization: Bearer <token>
+```
+
 ```json
 {
 	"id": 99999999,
@@ -458,7 +468,11 @@ erDiagram
 }
 ```
 
-`POST api/v1/home/lesson`
+```http
+POST api/v1/home/lesson
+Authorization: Bearer <token>
+```
+
 ```json
 {
 	"id": 99999999,
@@ -478,8 +492,12 @@ erDiagram
 ```
 
 ### 3.2.3 Профиль пользователя
-**Профиль пользователя
-`GET api/v1/profile?user_id=number`
+**Профиль пользователя**
+```http
+GET api/v1/profile
+Authorization: Bearer <token>
+```
+
 ```json
 {
 	"user_info": {
@@ -494,7 +512,11 @@ erDiagram
 ```
 
 
-`PUT api/v1/profile`
+```http
+PUT api/v1/profile
+Authorization: Bearer <token>
+```
+
 ```json
 {
 	"user_info": {
@@ -523,7 +545,10 @@ erDiagram
 ```
 
 **Достижения пользователя**
-`GET api/v1/profile/achivements?user_id=number`
+```http
+GET api/v1/profile/achivements
+Authorization: Bearer <token>
+```
 ```json
 {
 	"id": 99999999,
@@ -544,7 +569,11 @@ erDiagram
 }
 ```
 
-`PUT api/v1/profile/achevements`
+```http
+PUT api/v1/profile/achevements
+Authorization: Bearer <token>
+```
+
 ```json
 {
 	"id": 99999999,
