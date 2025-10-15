@@ -383,7 +383,7 @@ Authorization: Bearer <token>
 }
 ```
 
-**Список курсов
+**Список курсов**
 ```http
 GET http://site/api/v1/home/courses
 Authorization: Bearer <token>
@@ -401,19 +401,20 @@ Authorization: Bearer <token>
 			"title": "string"
 		}
 	],
-	"user_courses": {
-		[
+	"user_courses": [
+		{
 			"id": 99999999,
 			"title": "string",
-				"course_progress": 99999999,
+			"course_progress": 99999999,
 			"is_current": true
-		],
-		[
+		},
+		{
 			"id": 99999999,
 			"title": "string",
 			"course_progress": 99999999,
 			"is_current": false
-		]
+		}
+    ]
 }
 ```
 
