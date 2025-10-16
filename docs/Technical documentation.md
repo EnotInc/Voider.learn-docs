@@ -39,7 +39,7 @@ CREATE TABLE users (
 	last_active_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	days_streak INTEGER DEFAULT 0,
 	avatar_url VARCHAR(500),
-	is_active BOOLEAN DEFAUTL TRUE
+	is_active BOOLEAN DEFAULT TRUE
 );
 ```
 
@@ -76,12 +76,20 @@ CREATE TABLE lessons (
 	);
 ```
 
+**Список типов упражнений**
+```sql
+CREATE TABLE exercises_types (
+	id SERIAL PRIAMRY KEY,
+	type_name VARCHAR(20) UNIQUE NOT NULL
+);
+```
+
 **Список всех заданий**
 ```sql
 CREATE TABLE exercises (
 	id SERIAL PRIMARY KEY,
 	module_id INTEGER REFERENCES modules(id) ON DELETE CASCADE,
-	exercise_type VARCHAR(20) ,
+	exercise_type_id INTEGER REFERENCES exercise_types(id),
 	description VARCHAR(500),
 	correct_answer INTEGER REFERENCES answers(id) ON DELETE CASCADE,
 	exp_points INTEGER DEFAULT 10
@@ -93,16 +101,6 @@ CREATE TABLE exercises (
 CREATE TABLE answers (
 	id SERIAL PRIMARY KEY,
 	answer VARCHAR(50) NOT NULL
-);
-```
-
-**Список заданий в модуле**
-```sql
-CREATE TABLE module_exercises (
-	id SERIAL PRIMARY KEY,
-	module_id INTEGER REFERENCES modules(id) ON DELETE CASCADE,
-	exercise_id INTEGER REFERENCES exercises(id) ON DELETE CASCADE,
-	UNIQUE(module_id, exercise_id)
 );
 ```
 
@@ -170,126 +168,219 @@ CREATE TABLE friendships (
 ### 3.2.2 Диаграмма связей таблиц
 ```mermaid
 erDiagram
-    users {
-        SERIAL id PK
-        VARCHAR(50) username UK
-        VARCHAR(255) email UK
-        VARCHAR(255) password_hash
-        INTEGER exp_points
-        INTEGER level
-        TIMESTAMP created_at
-        TIMESTAMP last_active_at
-        INTEGER days_streak
-        VARCHAR(500) avatar_url
-    }
+    users {
 
-    courses {
-        SERIAL id PK
-        VARCHAR(100) title
-        TEXT description
-        VARCHAR(50) language
-    }
+        SERIAL id PK ""  
 
-    user_courses {
-        SERIAL id PK
-        INTEGER user_id FK
-        INTEGER course_id FK
-        TIMESTAMP started_at
-        TIMESTAMP completed_at
-        INTEGER current_module_id FK
-        INTEGER progress_percentage
-    }
+        VARCHAR(50) username UK "NOT NULL"  
 
-    modules {
-        SERIAL id PK
-        INTEGER course_id FK
-        VARCHAR(100) title
-        INTEGER order_index
-        INTEGER lesson_amount
-    }
+        VARCHAR(255) email UK "NOT NULL"  
 
-    lessons {
-        SERIAL id PK
-        INTEGER module_id FK
-        INTEGER order_index
-        INTEGER repetition_required
-        INTEGER exercises_per_repetition
-    }
+        VARCHAR(255) password_hash  "NOT NULL"  
 
-    answers {
-        SERIAL id PK
-        VARCHAR(50) answer
-    }
+        INTEGER exp_points  ""  
 
-    exercises {
-        SERIAL id PK
-        INTEGER module_id FK
-        VARCHAR(20) exercise_type
-        VARCHAR(500) description
-        INTEGER correct_answer FK
-        INTEGER exp_points
-    }
+        INTEGER level  ""  
 
-    module_exercises {
-        SERIAL id PK
-        INTEGER module_id FK
-        INTEGER exercise_id FK
-    }
+        TIMESTAMP created_at  ""  
 
-    lesson_attempts {
-        SERIAL id PK
-        INTEGER user_id FK
-        INTEGER lesson_id FK
-        INTEGER attempt_amount
-        BOOLEAN is_completed
-        BOOLEAN is_available
-    }
+        TIMESTAMP last_active_at  ""  
 
-    achivements {
-        SERIAL id PK
-        VARCHAR(100) title
-        TEXT description
-        VARCHAR(500) icon_url
-    }
+        INTEGER days_streak  ""  
 
-    user_achivements {
-        SERIAL id PK
-        INTEGER user_id FK
-        INTEGER achivement_id FK
-        TIMESTAMP earned_at
-    }
+        VARCHAR(500) avatar_url  ""  
 
-    friendships {
-        SERIAL id PK
-        INTEGER user_id FK
-        INTEGER friend_id FK
-        TIMESTAMP created_at
-        BOOLEAN is_request
-    }
+        BOOLEAN is_active  ""  
 
-    users ||--o{ user_courses : "enrolls_in"
-    users ||--o{ lesson_attempts : "makes"
-    users ||--o{ user_achivements : "earns"
-    users ||--o{ friendships : "has"
-    courses ||--o{ user_courses : "has_enrollments"
-    courses ||--o{ modules : "contains"
-    user_courses }o--|| modules : "current_module"
-    modules ||--o{ lessons : "contains"
-    modules ||--o{ exercises : "has"
-    modules ||--o{ module_exercises : "includes"
-    lessons ||--o{ lesson_attempts : "has_attempts"
-    exercises }|--|| answers : "references"
-    exercises ||--o{ module_exercises : "included_in"
-    achivements ||--o{ user_achivements : "awarded_to"
+    }
+
+    courses {
+
+        SERIAL id PK ""  
+
+        VARCHAR(100) title  "NOT NULL"  
+
+        TEXT description  ""  
+
+    }
+
+    modules {
+
+        SERIAL id PK ""  
+
+        INTEGER course_id FK ""  
+
+        VARCHAR(100) title  ""  
+
+        INTEGER order_index  "NOT NULL"  
+
+        INTEGER lesson_amount  "NOT NULL"  
+
+    }
+
+    lessons {
+
+        SERIAL id PK ""  
+
+        INTEGER module_id FK ""  
+
+        INTEGER order_index  "NOT NULL"  
+
+        INTEGER repetition_required  ""  
+
+        INTEGER repetition_done  ""  
+
+        BOOLEAN is_complete  ""  
+
+        INTEGER exercises_per_repetition  ""  
+
+    }
+
+    exercises {
+
+        SERIAL id PK ""  
+
+        INTEGER module_id FK ""  
+
+        INTEGER exercise_type_id FK ""  
+
+        VARCHAR(500) description  ""  
+
+        INTEGER correct_answer FK ""  
+
+        INTEGER exp_points  ""  
+
+    }
+
+    exercises_types {
+
+        SERIAL id PK ""  
+
+        VARCHAR(20) type_name UK "NOT NULL"  
+
+    }
+
+    answers {
+
+        SERIAL id PK ""  
+
+        VARCHAR(50) answer  "NOT NULL"  
+
+    }
+
+    lesson_attempts {
+
+        SERIAL id PK ""  
+
+        INTEGER user_id FK ""  
+
+        INTEGER lesson_id FK ""  
+
+        INTEGER attempt_amount  "NOT NULL"  
+
+        BOOLEAN is_completed  ""  
+
+        BOOLEAN is_available  ""  
+
+    }
+
+    user_courses {
+
+        SERIAL id PK ""  
+
+        INTEGER user_id FK ""  
+
+        INTEGER course_id FK ""  
+
+        TIMESTAMP started_at  ""  
+
+        TIMESTAMP completed_at  ""  
+
+        INTEGER current_module_id FK ""  
+
+        INTEGER progress_percentage  ""  
+
+    }
+
+    achivements {
+
+        SERIAL id PK ""  
+
+        VARCHAR(100) title  "NOT NULL"  
+
+        TEXT description  ""  
+
+        VARCHAR(500) icon_url  ""  
+
+    }
+
+    user_achivements {
+
+        SERIAL id PK ""  
+
+        INTEGER user_id FK ""  
+
+        INTEGER achivement_id FK ""  
+
+        TIMESTAMP earned_at  ""  
+
+    }
+
+    friendships {
+
+        SERIAL id PK ""  
+
+        INTEGER user_id FK ""  
+
+        INTEGER friend_id FK ""  
+
+        TIMESTAMP created_at  ""  
+
+        BOOLEAN is_request  ""  
+
+    }
+
+  
+
+    modules||--o{lessons:"содержит"
+
+    modules}o--||courses:"принадлежит к"
+
+    exercises}o--||modules:"принадлежит к модулю"
+
+    exercises}o--||exercises_types:"имеет тип"
+
+    exercises}o--||answers:"имеет правильный ответ"
+
+    lesson_attempts}o--||users:"принадлежит пользователю"
+
+    lesson_attempts}o--||lessons:"относится к уроку"
+
+    user_courses}o--||users:"принадлежит пользователю"
+
+    user_courses}o--||courses:"относится к курсу"
+
+    user_courses}o--||modules:"текущий модуль"
+
+    user_achivements}o--||users:"принадлежит пользователю"
+
+    user_achivements}o--||achivements:"относится к достижению"
+
+    friendships}o--||users:"инициатор дружбы"
+
+    friendships}o--||users:"получатель запроса"
 ```
 ## 3.2. Архитектура API
 ### 3.2.1. Регистрация/вход
 
 **Регистрация нового пользователя**
+
+_Request_
 ```http
 POST http://site/api/v1/auth/register
 ```
 
+_Body_
 ```json
 {
 	"username": "string",
@@ -298,6 +389,7 @@ POST http://site/api/v1/auth/register
 }
 ```
 
+_Response_
 `201 Created`
 ```json
 {
@@ -316,10 +408,13 @@ POST http://site/api/v1/auth/register
 ```
 
 **Авторизация пользователя**
+
+_Request_
 ```http
 POST http://site/api/v1/auth/login
 ```
 
+_Body_
 ```json
 {
 	"email": "string",
@@ -327,6 +422,7 @@ POST http://site/api/v1/auth/login
 }
 ```
 
+_Response_
 `200 OK`
 ```json
 {
@@ -346,11 +442,14 @@ POST http://site/api/v1/auth/login
 ```
 ### 3.2.2. Главная страница
 **Дорожная карта**
+
+_Request_
 ```http
 GET http://site/api/v1/home/roadmap
 Authorization: Bearer <token>
 ```
 
+_Response_
 ```json
 {
 	"user_info": {
@@ -384,11 +483,14 @@ Authorization: Bearer <token>
 ```
 
 **Список курсов**
+
+_Request_
 ```http
 GET http://site/api/v1/home/courses
 Authorization: Bearer <token>
 ```
 
+_Response_
 ```json
 {
 	"courses_available":[
@@ -419,11 +521,14 @@ Authorization: Bearer <token>
 ```
 
 **Прохождение урока**
+
+_Request_
 ```http
-GET http://site/api/v1/home/lessos/{lesson_id}
+GET http://site/api/v1/home/lessos/:id
 Authorization: Bearer <token>
 ```
 
+_Response_
 ```json
 {
 	"id": 99999999,
@@ -509,11 +614,15 @@ Authorization: Bearer <token>
 }
 ```
 
+**Результат прохождения урока**
+
+_Request_
 ```http
 POST http://site/api/v1/home/lesson
 Authorization: Bearer <token>
 ```
 
+_Body_
 ```json
 {
 	"id": 99999999,
@@ -523,6 +632,7 @@ Authorization: Bearer <token>
 }
 ```
 
+_Response_
 `200 Ok`
 ```json
 {
@@ -534,11 +644,14 @@ Authorization: Bearer <token>
 
 ### 3.2.3 Профиль пользователя
 **Профиль пользователя**
+
+_Request_
 ```http
 GET http://site/api/v1/profile
 Authorization: Bearer <token>
 ```
 
+_Response_
 ```json
 {
 	"user_info": {
@@ -552,12 +665,13 @@ Authorization: Bearer <token>
 }
 ```
 
-
+_Request_
 ```http
 PUT http://site/api/v1/profile
 Authorization: Bearer <token>
 ```
 
+_Body_
 ```json
 {
 	"user_info": {
@@ -571,6 +685,7 @@ Authorization: Bearer <token>
 }
 ```
 
+_Response_
 `200 ok`
 ```json
 {
@@ -586,11 +701,14 @@ Authorization: Bearer <token>
 ```
 
 **Достижения пользователя**
+
+_Request_
 ```http
 GET http://site/api/v1/profile/achivements
 Authorization: Bearer <token>
 ```
 
+_Response_
 ```json
 {
 	{
@@ -608,17 +726,22 @@ Authorization: Bearer <token>
 }
 ```
 
+**Получение достижения**
+
+_Request_
 ```http
 POST http://site/api/v1/profile/achivements
 Authorization: Bearer <token>
 ```
 
+_Body_
 ```json
 {
 	"achivement_id": 99999999
 }
 ```
 
+_Response_
 `200 Ok`
 ```json
 {
