@@ -4,4 +4,4 @@
 - [Техническая документация](https://github.com/EnotInc/Voider.dev-docs/blob/master/docs/Technical%20documentation.md)
 - [Техническое задание](https://github.com/EnotInc/Voider.dev-docs/blob/master/docs/Technical%20assigment.md)
 
-**Дата последнего обновления**: 16.10.2025
+**Дата последнего обновления**: 19.10.2025
