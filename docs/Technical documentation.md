@@ -71,7 +71,6 @@ CREATE TABLE lessons (
 	order_index INTEGER NOT NULL,
 	repetition_required INTEGER NOT NULL DEFAULT 3,
 	repetition_done INTEGER NOT NULL DEFAULT 0,
-	is_complete BOOLEAN NOT NULL DEFAULT FALSE,
 	exercises_per_repetition INTEGER NOT NULL DEFAULT 5
 	);
 ```
@@ -106,13 +105,12 @@ CREATE TABLE answers (
 
 **Статистика по урокам**
 ```sql
-CREATE TABLE lesson_attempts (
+CREATE TABLE user_lessons (
 	id SERIAL PRIMARY KEY,
 	user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
 	lesson_id INTEGER REFERENCES lessons(id) ON DELETE CASCADE,
 	attempt_amount INTEGER NOT NULL,
 	is_completed BOOLEAN DEFAULT FALSE,
-	is_available BOOLEAN DEFAULT FALSE,
 	UNIQUE (user_id, lesson_id, attempt_amount)
 );
 ```
@@ -441,6 +439,7 @@ _Response_
 }
 ```
 ### 3.2.2. Главная страница
+
 **Дорожная карта**
 
 _Request_
@@ -482,6 +481,7 @@ _Response_
 }
 ```
 
+
 **Список курсов**
 
 _Request_
@@ -520,20 +520,74 @@ _Response_
 }
 ```
 
+
+**Запись на курс**
+
+_Request_
+```http
+POST http://site/api/v1/home/courses
+Authorization: Bearer <token>
+```
+
+_Body_
+```json
+{
+	"course_id": 99999999
+}
+```
+
+_Response_
+`200 ok`
+```json
+{
+	"message": "course sucsessfuly added"
+}
+```
+
+
+**Отмена курса**
+
+_Request_
+```http
+DELETE http://site/api/v1/home/courses
+Authorization: Bearer <token>
+```
+
+_Body_
+```json
+{
+	"course_id": 99999999
+}
+```
+
+_Response_
+`200 ok`
+```json
+{
+	"message": "Course was deleted"
+}
+```
+
+
 **Прохождение урока**
 
 _Request_
 ```http
-GET http://site/api/v1/home/lessos/:id
+PUT http://site/api/v1/home/lessos/begin
 Authorization: Bearer <token>
+```
+
+_Body_
+```json
+{
+	"lesson_id": 99999999,
+}
 ```
 
 _Response_
 ```json
 {
-	"id": 99999999,
 	"exercises_amount": 99999999,
-	"current_repetition": 99999999,
 	"exercises": [
 		{
 			"id": 99999999,
@@ -557,7 +611,7 @@ _Response_
 					"id": 9999999999,
 					"answer": "string"
 				}
-				],
+			],
 			"correct_answer": 99999999,
 		},
 		{
@@ -618,7 +672,7 @@ _Response_
 
 _Request_
 ```http
-POST http://site/api/v1/home/lesson
+PUT http://site/api/v1/home/lesson/done
 Authorization: Bearer <token>
 ```
 
@@ -627,8 +681,6 @@ _Body_
 {
 	"id": 99999999,
 	"is_repetition_complete": true,
-	"current_repetition": 99999999,
-	"exp_earned": 99999999
 }
 ```
 
@@ -636,9 +688,11 @@ _Response_
 `200 Ok`
 ```json
 {
-	"id": 99999999,
-	"is_complete": 99999999,
-	"exp_earned": 99999999,
+	"id" 99999999,
+	"user_id" 99999999,
+	"lesson_id": 99999999,
+	"repetition_done": false,
+	"is_available": true
 }
 ```
 
