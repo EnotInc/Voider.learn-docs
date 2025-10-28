@@ -28,24 +28,24 @@ C --> D[exercises];
 
 **Информация о пользователях**
 ```sql
-CREATE TABLE users (
-	id SERIAL PRIMARY KEY,
-	username VARCHAR(50) UNIQUE NOT NULL,
-	email VARCHAR(255) UNIQUE NOT NULL,
-	password_hash VARCHAR(255) NOT NULL,
-	exp_points INTEGER DEFAULT 0,
-	level INTEGER DEFAULT 0,
-	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	last_active_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	days_streak INTEGER DEFAULT 0,
-	avatar_url VARCHAR(500),
-	is_active BOOLEAN DEFAULT TRUE
-);
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    exp_points INTEGER DEFAULT 0,
+    level INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_active_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    days_streak INTEGER DEFAULT 0,
+    avatar_url VARCHAR(500),
+    is_active BOOLEAN DEFAULT TRUE
+   );
 ```
 
 **Список курсов**
 ```sql
-CREATE TABLE courses (
+CREATE TABLE IF NOT EXISTS courses (
 	id SERIAL PRIMARY KEY,
 	title VARCHAR(100) NOT NULL,
 	description TEXT
@@ -54,70 +54,71 @@ CREATE TABLE courses (
 
 **Список модулей**
 ```sql
-CREATE TABLE modules (
-	id SERIAL PRIMARY KEY,
-	course_id INTEGER REFERENCES courses(id) ON DELETE CASCADE,
-	title VARCHAR(100),
-	order_index INTEGER NOT NULL, -- тут хранится порятдок модулей
-	lesson_amount INTEGER NOT NULL -- кол-во уроков в модуле
+CREATE TABLE IF NOT EXISTS modules (
+    id SERIAL PRIMARY KEY,
+    course_id INTEGER REFERENCES courses(id) ON DELETE CASCADE,
+    title VARCHAR(100),
+    order_index INTEGER NOT NULL, -- тут хранится порятдок модулей
+    lesson_amount INTEGER NOT NULL -- кол-во уроков в модуле
 );
 ```
 
 **Список уроков**
 ```sql
-CREATE TABLE lessons (
-	id SERIAL PRIMARY KEY,
-	module_id INTEGER REFERENCES modules(id) ON DELETE CASCADE,
-	order_index INTEGER NOT NULL,
-	repetition_required INTEGER NOT NULL DEFAULT 3,
-	repetition_done INTEGER NOT NULL DEFAULT 0,
-	exercises_per_repetition INTEGER NOT NULL DEFAULT 5
-	);
+CREATE TABLE IF NOT EXISTS lessons (
+    id SERIAL PRIMARY KEY,
+    module_id INTEGER REFERENCES modules(id) ON DELETE CASCADE,
+    order_index INTEGER NOT NULL,
+    repetition_required INTEGER NOT NULL DEFAULT 3,
+    exercises_per_repetition INTEGER NOT NULL DEFAULT 5
+);
 ```
 
 **Список типов упражнений**
 ```sql
-CREATE TABLE exercises_types (
-	id SERIAL PRIAMRY KEY,
-	type_name VARCHAR(20) UNIQUE NOT NULL
+CREATE TABLE IF NOT EXISTS exercises_types (
+    id SERIAL PRIMARY KEY,
+    type_name VARCHAR(20) UNIQUE NOT NULL
 );
 ```
 
 **Список всех заданий**
 ```sql
-CREATE TABLE exercises (
-	id SERIAL PRIMARY KEY,
-	module_id INTEGER REFERENCES modules(id) ON DELETE CASCADE,
-	exercise_type_id INTEGER REFERENCES exercise_types(id),
-	description VARCHAR(500),
-	correct_answer INTEGER REFERENCES answers(id) ON DELETE CASCADE,
-	exp_points INTEGER DEFAULT 10
-);
+CREATE TABLE IF NOT EXISTS exercises (
+    id SERIAL PRIMARY KEY,
+    module_id INTEGER REFERENCES modules(id) ON DELETE CASCADE,
+    exercise_type_id INTEGER REFERENCES exercises_types(id),
+    description VARCHAR(500),
+    correct_answer INTEGER REFERENCES answers(id) ON DELETE CASCADE,
+    exp_points INTEGER DEFAULT 10
+ );
 ```
 
 **Список возможных ответов**
 ```sql
-CREATE TABLE answers (
-	id SERIAL PRIMARY KEY,
-	answer VARCHAR(50) NOT NULL
+CREATE TABLE IF NOT EXISTS answers (
+    id SERIAL PRIMARY KEY,
+    answer VARCHAR(50) NOT NULL,
+    exercise_type_id INTEGER REFERENCES exercise_types(id)
 );
 ```
 
 **Статистика по урокам**
 ```sql
-CREATE TABLE user_lessons (
-	id SERIAL PRIMARY KEY,
-	user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-	lesson_id INTEGER REFERENCES lessons(id) ON DELETE CASCADE,
-	attempt_amount INTEGER NOT NULL,
-	is_completed BOOLEAN DEFAULT FALSE,
-	UNIQUE (user_id, lesson_id, attempt_amount)
+CREATE TABLE IF NOT EXISTS user_lessons (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    lesson_id INTEGER REFERENCES lessons(id) ON DELETE CASCADE,
+    repetition_done INTEGER NOT NULL DEFAULT 0,
+    is_complete BOOLEAN DEFAULT FALSE,
+    is_available BOOLEAN DEFAULT FALSE,
+    UNIQUE (user_id, lesson_id, repetition_done)
 );
 ```
 
 **Курсы которые проходят пользователи**
 ```sql
-CREATE TABLE user_courses (
+CREATE TABLE IF NOT EXISTS user_courses (
 	id SERIAL PRIMARY KEY,
 	user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
 	course_id INTEGER REFERENCES courses(id) ON DELETE CASCADE,
@@ -131,7 +132,7 @@ CREATE TABLE user_courses (
 
 **Список достижений**
 ```sql
-CREATE TABLE achivements (
+CREATE TABLE IF NOT EXISTS achivements (
 	id SERIAL PRIMARY KEY,
 	title VARCHAR(100) NOT NULL,
 	description TEXT,
@@ -141,7 +142,7 @@ CREATE TABLE achivements (
 
 **Достижения, полученные пользователями**
 ```sql
-CREATE TABLE user_achivements (
+CREATE TABLE IF NOT EXISTS user_achivements (
 	id SERIAL PRIMARY KEY,
 	user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
 	achivement_id INTEGER REFERENCES achivements(id) ON DELETE CASCADE,
@@ -152,221 +153,138 @@ CREATE TABLE user_achivements (
 
 **Список друзей**
 ```sql
-CREATE TABLE friendships (
-	id SERIAL PRIMARY KEY,
-	user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-	friend_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	is_request BOOLEAN DEFAULT TRUE, -- сначала запрос в друзья, при подтверждении становится FALSE
-	UNIQUE(user_id, friend_id),
-	CHECK(user_id != friend_id)
+CREATE TABLE IF NOT EXISTS friendships (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    friend_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_request BOOLEAN DEFAULT TRUE, -- сначала запрос в друзья, при подтверждении становится FALSE
+    UNIQUE(user_id, friend_id),
+    CHECK(user_id != friend_id)
 );
 ```
 
 ### 3.2.2 Диаграмма связей таблиц
 ```mermaid
 erDiagram
-    users {
-
-        SERIAL id PK ""  
-
-        VARCHAR(50) username UK "NOT NULL"  
-
-        VARCHAR(255) email UK "NOT NULL"  
-
-        VARCHAR(255) password_hash  "NOT NULL"  
-
-        INTEGER exp_points  ""  
-
-        INTEGER level  ""  
-
-        TIMESTAMP created_at  ""  
-
-        TIMESTAMP last_active_at  ""  
-
-        INTEGER days_streak  ""  
-
-        VARCHAR(500) avatar_url  ""  
-
-        BOOLEAN is_active  ""  
-
-    }
-
-    courses {
-
-        SERIAL id PK ""  
-
-        VARCHAR(100) title  "NOT NULL"  
-
-        TEXT description  ""  
-
-    }
-
-    modules {
-
-        SERIAL id PK ""  
-
-        INTEGER course_id FK ""  
-
-        VARCHAR(100) title  ""  
-
-        INTEGER order_index  "NOT NULL"  
-
-        INTEGER lesson_amount  "NOT NULL"  
-
-    }
-
-    lessons {
-
-        SERIAL id PK ""  
-
-        INTEGER module_id FK ""  
-
-        INTEGER order_index  "NOT NULL"  
-
-        INTEGER repetition_required  ""  
-
-        INTEGER repetition_done  ""  
-
-        BOOLEAN is_complete  ""  
-
-        INTEGER exercises_per_repetition  ""  
-
-    }
-
-    exercises {
-
-        SERIAL id PK ""  
-
-        INTEGER module_id FK ""  
-
-        INTEGER exercise_type_id FK ""  
-
-        VARCHAR(500) description  ""  
-
-        INTEGER correct_answer FK ""  
-
-        INTEGER exp_points  ""  
-
-    }
-
-    exercises_types {
-
-        SERIAL id PK ""  
-
-        VARCHAR(20) type_name UK "NOT NULL"  
-
-    }
-
-    answers {
-
-        SERIAL id PK ""  
-
-        VARCHAR(50) answer  "NOT NULL"  
-
-    }
-
-    lesson_attempts {
-
-        SERIAL id PK ""  
-
-        INTEGER user_id FK ""  
-
-        INTEGER lesson_id FK ""  
-
-        INTEGER attempt_amount  "NOT NULL"  
-
-        BOOLEAN is_completed  ""  
-
-        BOOLEAN is_available  ""  
-
-    }
-
-    user_courses {
-
-        SERIAL id PK ""  
-
-        INTEGER user_id FK ""  
-
-        INTEGER course_id FK ""  
-
-        TIMESTAMP started_at  ""  
-
-        TIMESTAMP completed_at  ""  
-
-        INTEGER current_module_id FK ""  
-
-        INTEGER progress_percentage  ""  
-
-    }
-
-    achivements {
-
-        SERIAL id PK ""  
-
-        VARCHAR(100) title  "NOT NULL"  
-
-        TEXT description  ""  
-
-        VARCHAR(500) icon_url  ""  
-
-    }
-
-    user_achivements {
-
-        SERIAL id PK ""  
-
-        INTEGER user_id FK ""  
-
-        INTEGER achivement_id FK ""  
-
-        TIMESTAMP earned_at  ""  
-
-    }
-
-    friendships {
-
-        SERIAL id PK ""  
-
-        INTEGER user_id FK ""  
-
-        INTEGER friend_id FK ""  
-
-        TIMESTAMP created_at  ""  
-
-        BOOLEAN is_request  ""  
-
-    }
-
-  
-
-    modules||--o{lessons:"содержит"
-
-    modules}o--||courses:"принадлежит к"
-
-    exercises}o--||modules:"принадлежит к модулю"
-
-    exercises}o--||exercises_types:"имеет тип"
-
-    exercises}o--||answers:"имеет правильный ответ"
-
-    lesson_attempts}o--||users:"принадлежит пользователю"
-
-    lesson_attempts}o--||lessons:"относится к уроку"
-
-    user_courses}o--||users:"принадлежит пользователю"
-
-    user_courses}o--||courses:"относится к курсу"
-
-    user_courses}o--||modules:"текущий модуль"
-
-    user_achivements}o--||users:"принадлежит пользователю"
-
-    user_achivements}o--||achivements:"относится к достижению"
-
-    friendships}o--||users:"инициатор дружбы"
-
-    friendships}o--||users:"получатель запроса"
+    users ||--o{ user_courses : "has"
+    users ||--o{ user_lessons : "has"
+    users ||--o{ user_achivements : "has"
+    users ||--o{ friendships : "has as user"
+    users ||--o{ friendships : "has as friend"
+    
+    courses ||--o{ modules : contains
+    courses ||--o{ user_courses : "has"
+    
+    modules ||--o{ lessons : contains
+    modules ||--o{ exercises : contains
+    modules ||--o{ user_courses : "current module"
+    
+    lessons ||--o{ user_lessons : "has"
+    
+    exercises_types ||--o{ exercises : "has type"
+    exercises_types ||--o{ answers : "has type"
+    
+    exercises ||--|| answers : "has correct"
+    
+    achivements ||--o{ user_achivements : "has"
+
+    users {
+        serial id PK
+        varchar username UK
+        varchar email UK
+        varchar password_hash
+        integer exp_points
+        integer level
+        timestamp created_at
+        timestamp last_active_at
+        integer days_streak
+        varchar avatar_url
+        boolean is_active
+    }
+    
+    courses {
+        serial id PK
+        varchar title
+        text description
+    }
+    
+    modules {
+        serial id PK
+        integer course_id FK
+        varchar title
+        integer order_index
+        integer lesson_amount
+    }
+    
+    lessons {
+        serial id PK
+        integer module_id FK
+        integer order_index
+        integer repetition_required
+        integer exercises_per_repetition
+    }
+    
+    exercises_types {
+        serial id PK
+        varchar type_name UK
+    }
+    
+    exercises {
+        serial id PK
+        integer module_id FK
+        integer exercise_type_id FK
+        varchar description
+        integer correct_answer FK
+        integer exp_points
+    }
+    
+    answers {
+        serial id PK
+        varchar answer
+        integer exercise_type_id FK
+    }
+    
+    user_lessons {
+        serial id PK
+        integer user_id FK
+        integer lesson_id FK
+        integer repetition_done
+        boolean is_complete
+        boolean is_available
+    }
+    
+    user_courses {
+        serial id PK
+        integer user_id FK
+        integer course_id FK
+        timestamp started_at
+        timestamp completed_at
+        integer current_module_id FK
+        integer progress_percentage
+    }
+    
+    achivements {
+        serial id PK
+        varchar title
+        text description
+        varchar icon_url
+    }
+    
+    user_achivements {
+        serial id PK
+        integer user_id FK
+        integer achivement_id FK
+        timestamp earned_at
+    }
+    
+    friendships {
+        serial id PK
+        integer user_id FK
+        integer friend_id FK
+        timestamp created_at
+        boolean is_request
+    }
 ```
 ## 3.2. Архитектура API
 ### 3.2.1. Регистрация/вход
@@ -830,4 +748,3 @@ _Response_
 
 ### 4.1.4. Курсы
 - Список курсов
-
