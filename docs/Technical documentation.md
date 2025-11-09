@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS user_lessons (
     repetition_done INTEGER NOT NULL DEFAULT 0,
     is_complete BOOLEAN DEFAULT FALSE,
     is_available BOOLEAN DEFAULT FALSE,
-    UNIQUE (user_id, lesson_id, repetition_done)
+    UNIQUE (user_id, lesson_id )
 );
 ```
 
@@ -164,128 +164,6 @@ CREATE TABLE IF NOT EXISTS friendships (
 );
 ```
 
-### 3.2.2 Диаграмма связей таблиц
-```mermaid
-erDiagram
-    users ||--o{ user_courses : "has"
-    users ||--o{ user_lessons : "has"
-    users ||--o{ user_achivements : "has"
-    users ||--o{ friendships : "has as user"
-    users ||--o{ friendships : "has as friend"
-    
-    courses ||--o{ modules : contains
-    courses ||--o{ user_courses : "has"
-    
-    modules ||--o{ lessons : contains
-    modules ||--o{ exercises : contains
-    modules ||--o{ user_courses : "current module"
-    
-    lessons ||--o{ user_lessons : "has"
-    
-    exercises_types ||--o{ exercises : "has type"
-    exercises_types ||--o{ answers : "has type"
-    
-    exercises ||--|| answers : "has correct"
-    
-    achivements ||--o{ user_achivements : "has"
-
-    users {
-        serial id PK
-        varchar username UK
-        varchar email UK
-        varchar password_hash
-        integer exp_points
-        integer level
-        timestamp created_at
-        timestamp last_active_at
-        integer days_streak
-        varchar avatar_url
-        boolean is_active
-    }
-    
-    courses {
-        serial id PK
-        varchar title
-        text description
-    }
-    
-    modules {
-        serial id PK
-        integer course_id FK
-        varchar title
-        integer order_index
-        integer lesson_amount
-    }
-    
-    lessons {
-        serial id PK
-        integer module_id FK
-        integer order_index
-        integer repetition_required
-        integer exercises_per_repetition
-    }
-    
-    exercises_types {
-        serial id PK
-        varchar type_name UK
-    }
-    
-    exercises {
-        serial id PK
-        integer module_id FK
-        integer exercise_type_id FK
-        varchar description
-        integer correct_answer FK
-        integer exp_points
-    }
-    
-    answers {
-        serial id PK
-        varchar answer
-        integer exercise_type_id FK
-    }
-    
-    user_lessons {
-        serial id PK
-        integer user_id FK
-        integer lesson_id FK
-        integer repetition_done
-        boolean is_complete
-        boolean is_available
-    }
-    
-    user_courses {
-        serial id PK
-        integer user_id FK
-        integer course_id FK
-        timestamp started_at
-        timestamp completed_at
-        integer current_module_id FK
-        integer progress_percentage
-    }
-    
-    achivements {
-        serial id PK
-        varchar title
-        text description
-        varchar icon_url
-    }
-    
-    user_achivements {
-        serial id PK
-        integer user_id FK
-        integer achivement_id FK
-        timestamp earned_at
-    }
-    
-    friendships {
-        serial id PK
-        integer user_id FK
-        integer friend_id FK
-        timestamp created_at
-        boolean is_request
-    }
-```
 ## 3.2. Архитектура API
 ### 3.2.1. Регистрация/вход
 
@@ -318,7 +196,8 @@ _Response_
 		"created_at": "00:00:0000",
 		"exp_points": 99999999,
 		"level": 99999999,
-		"days_streak": 99999999
+		"days_streak": 99999999,
+		"avatar_url": "string"
 	}
 }
 ```
@@ -350,9 +229,9 @@ _Response_
 		"email": "string",
 		"exp_points": 99999999,
 		"level": 99999999,
-		"avatar_url": "string",
 		"days_streak": 99999999,
-		"last_active_at": "00:00:0000"
+		"last_active_at": "00:00:0000",
+		"avatar_url": "string"
 	}
 }
 ```
@@ -378,7 +257,6 @@ _Response_
 	},
 	"current_course": {
 		"id": 99999999,
-		"title": "string",
 		"progress_percentage": 99999999,
 		"current_module":{
 			"id": 99999999,
@@ -390,8 +268,17 @@ _Response_
 					"order_index": 99999999,
 					"repetition_required": 99999999,
 					"repetition_done": 99999999,
-					"is_complele": true
+					"is_complele": false,
+					"is_available": true
 				},
+				{
+					"id": 99999999,
+					"order_index": 99999999,
+					"repetition_required": 99999999,
+					"repetition_done": 99999999,
+					"is_complele": false,
+					"is_available": true
+				}
 			]
 		}
 	}
@@ -413,24 +300,25 @@ _Response_
 	"courses_available":[
 		{
 			"id": 99999999,
-			"title": "string"
+			"title": "string",
+			"description": "string"
 		},
 		{
 			"id": 99999999,
-			"title": "string"
+			"title": "string",
+			"description": "string"
 		}
 	],
 	"user_courses": [
 		{
 			"id": 99999999,
+			"user_id": 99999999,
+			"course_id" : 99999999,
+			"started_at" : "string",
+			"completed_at" : "string",
+			"current_module_id" : 99999999,
 			"course_progress": 99999999,
-			"is_current": true
 		},
-		{
-			"id": 99999999,
-			"course_progress": 99999999,
-			"is_current": false
-		}
     ]
 }
 ```
@@ -502,83 +390,63 @@ _Body_
 _Response_
 ```json
 {
+	"id" : 99999999,
 	"exercises_amount": 99999999,
 	"exercises": [
 		{
 			"id": 99999999,
-			"exercise_type": "string",
-			"exp_points": 99999999,
 			"description": "string",
 			"answers": [
 				{
 					"id": 9999999999,
-					"answer": "string"
+					"answer": "string",
+					"exercise_type_id" : 99999999
 				},
 				{
 					"id": 9999999999,
-					"answer": "string"
+					"answer": "string",
+					"exercise_type_id" : 99999999
 				},
 				{
 					"id": 9999999999,
-					"answer": "string"
+					"answer": "string",
+					"exercise_type_id" : 99999999
 				},
 				{
 					"id": 9999999999,
-					"answer": "string"
+					"answer": "string",
+					"exercise_type_id" : 99999999
 				}
 			],
 			"correct_answer": 99999999,
 		},
 		{
 			"id": 99999999,
-			"exercise_type": "string",
-			"exp_points": 99999999,
 			"description": "string",
 			"answers": [
 				{
 					"id": 9999999999,
-					"answer": "string"
+					"answer": "string",
+					"exercise_type_id" : 99999999
 				},
 				{
 					"id": 9999999999,
-					"answer": "string"
+					"answer": "string",
+					"exercise_type_id" : 99999999
 				},
 				{
 					"id": 9999999999,
-					"answer": "string"
+					"answer": "string",
+					"exercise_type_id" : 99999999
 				},
 				{
 					"id": 9999999999,
-					"answer": "string"
-				}
-				],
-			"correct_answer": 99999999,
-		},
-		{
-			"id": 99999999,
-			"exercise_type": "string",
-			"exp_points": 99999999,
-			"description": "string",
-			"answers": [
-				{
-					"id": 9999999999,
-					"answer": "string"
-				},
-				{
-					"id": 9999999999,
-					"answer": "string"
-				},
-				{
-					"id": 9999999999,
-					"answer": "string"
-				},
-				{
-					"id": 9999999999,
-					"answer": "string"
+					"answer": "string",
+					"exercise_type_id" : 99999999
 				}
 			],
 			"correct_answer": 99999999,
-		},
+		},	
 	],
 }
 ```
@@ -606,7 +474,8 @@ _Response_
 	"id" 99999999,
 	"user_id" 99999999,
 	"lesson_id": 99999999,
-	"repetition_done": false,
+	"repetition_done": 99999999,
+	"is_complete" : false,
 	"is_available": true
 }
 ```
@@ -623,11 +492,13 @@ Authorization: Bearer <token>
 _Response_
 ```json
 {
-	"user_info": {
+	"user": {
 		"id": 99999999,
 		"username": "string",
-		"level": 99999999,
+		"email" : "string",
+		"created_at" : "string",
 		"exp_points": 99999999,
+		"level": 99999999,
 		"days_streak": 99999999,
 		"avatar_url": "string",
 	},
@@ -646,8 +517,9 @@ _Body_
 	"user_info": {
 		"id": 99999999,
 		"username": "string",
-		"level": 99999999,
+		"email" : "email",
 		"exp_points": 99999999,
+		"level": 99999999,
 		"days_streak": 99999999,
 		"avatar_url": "string",
 	},
@@ -658,11 +530,13 @@ _Response_
 `200 ok`
 ```json
 {
-	"user_info": {
+	"user": {
 		"id": 99999999,
 		"username": "string",
-		"level": 99999999,
+		"email" : "string",
+		"created_at" : "string",
 		"exp_points": 99999999,
+		"level": 99999999,
 		"days_streak": 99999999,
 		"avatar_url": "string",
 	},
