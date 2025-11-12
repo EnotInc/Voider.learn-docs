@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
+    fcmToken TEXT,
     exp_points INTEGER DEFAULT 0,
     level INTEGER DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -463,7 +464,7 @@ _Body_
 ```json
 {
 	"id": 99999999,
-	"is_repetition_complete": true,
+	"exp_earned" : 99999999
 }
 ```
 
