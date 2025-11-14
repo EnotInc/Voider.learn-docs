@@ -1,32 +1,113 @@
-# 1. Введение
+	# 1. Введение
 ## 1.1. Краткое описание возможностей приложения
 **Voider.learn** - приложения для обучения начинающих программистов при помощи коротких уроков в игровом формате
 
-# 2. Стек технологий
-## 2.1. Серверная часть приложения
-- Node.js
-- Express.js
-- PostgreSQL
-## 2.2. Клиентская часть приложения
-- Flutter(dart)
-- Dio - для запросов к API
-
-# 3. Структура приложения
-## 3.1. Архитектура приложения
-### 3.1.1 Иерархия обучения
-
-Пользователь выбирает курс, разделенный на модули. В модуле есть уроки, в каждом из которых будут задания. 
+# 2 Общее описание системы
+## 2.1. Архитектура Проекта
 ```mermaid
-graph LR;
-A[course] --> B[modules]
-B --> C[lessons]
-C --> D[exercises];
+flowchart LR
+
+    subgraph server
+        direction TB
+
+        subgraph database
+            db[(postgreSQL)]
+        end
+  
+        subgraph api
+            direction TB
+            mid[middleware]
+            point[ednpoint]
+            ctrl[controller]
+            s_model[model]
+
+            s_model -->|query| db  
+            db --> |result set| ctrl    
+
+            point -->|bearer token| mid
+            point -->|body| ctrl
+            mid -->|json| point
+            ctrl -->|json| point
+            ctrl -->|data|s_model
+        end
+    end
+  
+    subgraph client
+        direction TB
+        ui[View]
+        vm[ViewModel]
+        c_model[Model]
+
+        ui -->|event|vm
+        vm -->|state|ui
+        vm -->|json|c_model
+        c_model -->|parsed data| vm
+    end
+
+    client -->|http request| server
+    server -->|http response| client
 ```
-Упражнения не привязаны к урокам, и могут повторятся от одного урока к другому. Но упражнения привязаны к модулю. Упражнение может повторно появиться в модуле на "уровень" больше, но не наоборот.  Уроки, по сути, являются "чекпонитами", постепенно проходя которые пользователь проходит модуль. Модули идут последовательно, один за другим, в заранее прописанном порядке. Пройдя все модули, пользователь закрывает курс.
-## 3.2. Архитектура БД
-### 3.2.1. Список таблиц
+
+**Client**
+1. Пользователь взаимодействует со `View`
+2. `View` посылает событие(`event`) на `ViewModel`
+3. `ViewModel` задает состояние (`state`) которое будет отрисовано на `view`
+4. `ViewModel` посылает запрос к `API`
+5. `ViewModel` разбирает `JSON` ответ в `Model`
+6. `ViewModel` Обновляет состояние(`state`)
+7. `View` отображает изменения
+
+**Server**
+1. На `endpoint` приходит запрос
+2. `middleware` проверяет `bearer token`. При возникновении ошибке или отсутствии токена `middleware` отправляет `json` ответ на `endpoint`
+3. `endpoint` передает тело(`body`) запроса в `controller`
+4. `controller` передает данные(`data`) в `model`
+5. `model` отправляет запрос(`query`) в базу данных(`database`)
+6. Ответ(`reslut set`) из базы данных(`database`) получает `controller`
+7. Он(`controller`) обрабатывает их, формирует и отправляет `json` ответ на `endpoint`
+## 2.2. Стек технологий
+## 2.2.1 Серверная часть приложения
+- **Фреймворк** - Node.js, express.js
+- **Aутентификация** - jsonwebtoke, bycript, argon
+- **База данных** - PostgreSQL, Firebase-admin
+## 2.2.2 Клиентская часть приложения
+- **Фреймворк** - Flutter
+- **http запросы** - Dio
+- **Управление состоянием** - BLoC / GetIt
+- **Уведомления** - Firebase Messaging
+
+## 2.3 - Переменные среды
+
+**Client**
+```sh
+API = "http://<site>/api/v1/"
+```
+- **API** - строковая переменная с хостом, где ___site___ - домен
+
+**Server***
+```sh
+DB_USER = postgres
+DB_HOST = host
+DB_NAME = name
+DB_PASSWORD = password
+DB_PORT = port
+
+JWT_SECRET = sercet
+JWT_EXPIRES = <x><m/h/d>
+```
+
+- **DB_HOST** - строка с хостом
+- **DB_NAME** - строка с именем базы
+- **DB_PASSWORD** - строка с паролем к базе
+- **DB_PORT** - число, номер порта
+- **JWT_SECRET** - строка, jwt секрет
+- **JWT_EXPIRES** - строка, устанавливает время для JWT токена. x - число, m/h/d - минуты/часы/дни 
+
+# 3. Структура сервера
+## 3.1. Список таблиц
 
 **Информация о пользователях**
+
 ```sql
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
@@ -165,14 +246,23 @@ CREATE TABLE IF NOT EXISTS friendships (
 );
 ```
 
-## 3.2. Архитектура API
+**Список напоминаний**
+```sql
+CREATE TABLE IF NOT EXISTS reminders(
+	id SERIAL PRIMARY KEY,
+	title VARCHAR(48) NOT NULL,
+	body VARCHAR(128) NOT NULL,
+	days_past INTEGER NOT NULL DEFAULT 1
+)
+```
+## 3.2. Запросы HTTP
 ### 3.2.1. Регистрация/вход
 
 **Регистрация нового пользователя**
 
 _Request_
 ```http
-POST http://site/api/v1/auth/register
+POST api/v1/auth/register
 ```
 
 _Body_
@@ -207,7 +297,7 @@ _Response_
 
 _Request_
 ```http
-POST http://site/api/v1/auth/login
+POST api/v1/auth/login
 ```
 
 _Body_
@@ -242,7 +332,7 @@ _Response_
 
 _Request_
 ```http
-GET http://site/api/v1/home/roadmap
+GET api/v1/home/roadmap
 Authorization: Bearer <token>
 ```
 
@@ -291,7 +381,7 @@ _Response_
 
 _Request_
 ```http
-GET http://site/api/v1/home/courses
+GET api/v1/home/courses
 Authorization: Bearer <token>
 ```
 
@@ -329,7 +419,7 @@ _Response_
 
 _Request_
 ```http
-POST http://site/api/v1/home/courses
+POST api/v1/home/courses
 Authorization: Bearer <token>
 ```
 
@@ -353,7 +443,7 @@ _Response_
 
 _Request_
 ```http
-DELETE http://site/api/v1/home/courses
+DELETE api/v1/home/courses
 Authorization: Bearer <token>
 ```
 
@@ -377,7 +467,7 @@ _Response_
 
 _Request_
 ```http
-PUT http://site/api/v1/home/lessos/begin
+PUT api/v1/home/lessos/begin
 Authorization: Bearer <token>
 ```
 
@@ -456,7 +546,7 @@ _Response_
 
 _Request_
 ```http
-PUT http://site/api/v1/home/lesson/done
+PUT api/v1/home/lesson/done
 Authorization: Bearer <token>
 ```
 
@@ -486,7 +576,7 @@ _Response_
 
 _Request_
 ```http
-GET http://site/api/v1/profile
+GET api/v1/profile
 Authorization: Bearer <token>
 ```
 
@@ -508,7 +598,7 @@ _Response_
 
 _Request_
 ```http
-PUT http://site/api/v1/profile
+PUT api/v1/profile
 Authorization: Bearer <token>
 ```
 
@@ -548,7 +638,7 @@ _Response_
 
 _Request_
 ```http
-GET http://site/api/v1/profile/achivements
+GET api/v1/profile/achivements
 Authorization: Bearer <token>
 ```
 
@@ -574,7 +664,7 @@ _Response_
 
 _Request_
 ```http
-POST http://site/api/v1/profile/achivements
+POST api/v1/profile/achivements
 Authorization: Bearer <token>
 ```
 
@@ -602,20 +692,92 @@ _Response_
 ]
 ```
 
-# 4. Описание клиентской части приложения
-## 4.1. Архитектура
+### 3.2.4 Пользователи
+**Список всех пользователей**
 
-Основным архитектурным паттерном является MVVM (Model, View, ViewModel), ну или что-то похожее на него :)
-## 4.2. Файловая структура
+```http
+GET api/v1/users
+Authorization: Bearer <token>
+```
+
+_Response_
+`200 Ok`
+```json
+[
+	{
+		"id": 99999999,
+		"username": "string",
+		"password_hash": "string",
+		"exp_points": 99999999,
+		"level": 99999999,
+		"created_at": "string",
+		"last_active_at": "string",
+		"days_streak": 99999999,
+		"avatar_url": 99999999,
+		"is_active": true
+	},
+	{
+		//...
+	}
+]
+```
+
+**обновление fcmToken**
+
+```http
+PUT api/v1/users/device
+Authorization: Bearer <token>
+```
+
+_Body_
+```json
+{
+	"fcmToken": "string"
+}
+```
+
+_Response_
+`200 Ok`
+```json
+{
+	"message": "string"
+}
+```
+
+**Отправка сообщения**
+
+```http
+PUT api/v1/users/message
+Authorization: Bearer <token>
+```
+
+_Body_
+```json
+{
+	"title": "string",
+	"body": "string"
+}
+```
+
+_Response_
+`200 Ok`
+```json
+{
+	"message": "string"
+}
+```
+
+
+# 4. Структура клиента
 
 Все основные файлы хранятся в папке `lib/`
 
-### 4.2.1 `lib/`
+### 4.1. `lib/`
 Папка `lib/` хранит в себе папки(пункты 4.2.2 - 4.2.4) и 2 файла:
 - `main.dart` - точка входа в программу
 - `voider.dart` - виджет приложения
 
-### 4.2.2 `lib/core/`
+## 4.2. `lib/core/`
 
 `lib/core/` - Папка с глобальными вещами, хранящая в себе:
 - `assets/` - папка для изображений
@@ -624,58 +786,20 @@ _Response_
 - `storage.dart` - файл хранящий логику работы с SecureStorage
 - `theme.dart` - файл с описанием темы приложения
 
-### 4.2.3 `lib/repositories/`
+## 4.3. `lib/repositories/`
 
 `lib/repositories/` - Хранит в себе всю логику работы с api (Model из MVVM):
  - `models/` - хранит все модели для работы с бд(может содержать вложенные папки)
  - `servises/` - хранит в себе файлы для работы с запросами к api и их парсингу в модели
 
-### 4.2.4 - `lib/screens/`
+## 4.4. - `lib/screens/`
 
 `lib/screens/` - Хранит в себе все экраны. Содержит в себе View и ViewModel из MVVM архитектуры:
 
-#### 4.2.4.1 Пример экрана `foo_screen/`
+### 4.4.1 Пример экрана `foo_screen/`
 
 `foo_screen/` - папка с экраном
 - `bloc/` - ViewModel - хранит в себе состояния(`state`), ивенты(`event`) и сам bloc, необходимый для менеджмента состояний. Может хранить в себе несколько папок с блоками, в случае когда экран может состоять из нескольких
 - `view/` - папка для хранения представления(view) экрана(ов). Может хранить в себе несколько представлений, в случае когда экран может состоять из нескольких. Так же хранит в себе файл с экспортом представления
 - `widget/` - папка с виджетами, которые используются на экране. Может хранить в себе дополнительные папки, если экран состоит из нескольких. Так же хранит в себе файл с экспортом виджетов
 - `foo.dart` - файл, одноименный названию экрана. Служит для его экспорта
-
-## 4.2.5 - (почти) полное файловое дерево
-```markdown
-lib/
-	+- core/
-	|	+- assets/
-	|	+- shared_widgets/
-	|	+- router.dart
-	|	+- storage.dart
-	|	+- theme.dart
-	+- repositories/
-	|	+- models/
-	|	+- servises/
-	+- screens/
-	|	+- auth/
-	|	|	+- bloc/
-	|	|	+- view/
-	|	|	+- widget/
-	|	|	+- auth.dart
-	|	+- home/
-	|	|	+- bloc/
-	|	|	|	+- courses/
-	|	|	|	+- profile/
-	|	|	|	+- roadmap/
-	|	|	+- view/
-	|	|	+- widget/
-	|	|	|	+- courses/
-	|	|	|	+- profile/
-	|	|	|	+- roadmap/
-	|	|	+- home.dart
-	|	+- lesson/
-	|		+- bloc/
-	|		+- view/
-	|		+- widget/
-	|		+- lesson.dart
-	+- main.dart
-	+- voider.dart
-```
