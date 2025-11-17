@@ -1,4 +1,4 @@
-	# 1. Введение
+# 1. Введение
 ## 1.1. Краткое описание возможностей приложения
 **Voider.learn** - приложения для обучения начинающих программистов при помощи коротких уроков в игровом формате
 
@@ -262,7 +262,7 @@ CREATE TABLE IF NOT EXISTS reminders(
 
 _Request_
 ```http
-POST api/v1/auth/register
+POST http://<site>/api/v1/auth/register
 ```
 
 _Body_
@@ -297,7 +297,7 @@ _Response_
 
 _Request_
 ```http
-POST api/v1/auth/login
+POST http://<site>/api/v1/auth/login
 ```
 
 _Body_
@@ -332,7 +332,7 @@ _Response_
 
 _Request_
 ```http
-GET api/v1/home/roadmap
+GET http://<site>/api/v1/home/roadmap
 Authorization: Bearer <token>
 ```
 
@@ -381,7 +381,7 @@ _Response_
 
 _Request_
 ```http
-GET api/v1/home/courses
+GET http://<site>/api/v1/home/courses
 Authorization: Bearer <token>
 ```
 
@@ -419,7 +419,7 @@ _Response_
 
 _Request_
 ```http
-POST api/v1/home/courses
+POST http://<site>/api/v1/home/courses
 Authorization: Bearer <token>
 ```
 
@@ -443,7 +443,7 @@ _Response_
 
 _Request_
 ```http
-DELETE api/v1/home/courses
+DELETE http://<site>/api/v1/home/courses
 Authorization: Bearer <token>
 ```
 
@@ -467,7 +467,7 @@ _Response_
 
 _Request_
 ```http
-PUT api/v1/home/lessos/begin
+PUT http://<site>/api/v1/home/lessos/begin
 Authorization: Bearer <token>
 ```
 
@@ -546,7 +546,7 @@ _Response_
 
 _Request_
 ```http
-PUT api/v1/home/lesson/done
+PUT http://<site>/api/v1/home/lesson/done
 Authorization: Bearer <token>
 ```
 
@@ -576,7 +576,7 @@ _Response_
 
 _Request_
 ```http
-GET api/v1/profile
+GET http://<site>/api/v1/profile
 Authorization: Bearer <token>
 ```
 
@@ -598,7 +598,7 @@ _Response_
 
 _Request_
 ```http
-PUT api/v1/profile
+PUT http://<site>/api/v1/profile
 Authorization: Bearer <token>
 ```
 
@@ -638,7 +638,7 @@ _Response_
 
 _Request_
 ```http
-GET api/v1/profile/achivements
+GET http://<site>/api/v1/profile/achivements
 Authorization: Bearer <token>
 ```
 
@@ -664,7 +664,7 @@ _Response_
 
 _Request_
 ```http
-POST api/v1/profile/achivements
+POST http://<site>/api/v1/profile/achivements
 Authorization: Bearer <token>
 ```
 
@@ -696,7 +696,7 @@ _Response_
 **Список всех пользователей**
 
 ```http
-GET api/v1/users
+GET http://<site>/api/v1/users
 Authorization: Bearer <token>
 ```
 
@@ -715,9 +715,6 @@ _Response_
 		"days_streak": 99999999,
 		"avatar_url": 99999999,
 		"is_active": true
-	},
-	{
-		//...
 	}
 ]
 ```
@@ -725,7 +722,7 @@ _Response_
 **обновление fcmToken**
 
 ```http
-PUT api/v1/users/device
+PUT http://<site>/api/v1/users/device
 Authorization: Bearer <token>
 ```
 
@@ -747,7 +744,7 @@ _Response_
 **Отправка сообщения**
 
 ```http
-PUT api/v1/users/message
+PUT http://<site>/api/v1/users/message
 Authorization: Bearer <token>
 ```
 
