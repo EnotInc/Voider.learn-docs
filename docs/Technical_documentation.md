@@ -76,7 +76,7 @@ flowchart LR
 - **Управление состоянием** - BLoC / GetIt
 - **Уведомления** - Firebase Messaging
 
-## 2.3 - Переменные среды
+## 2.3 - Переменные среды .env
 
 **Client**
 ```sh
@@ -262,7 +262,7 @@ CREATE TABLE IF NOT EXISTS reminders(
 
 _Request_
 ```http
-POST http://<site>/api/v1/auth/register
+POST http://api/auth/register
 ```
 
 _Body_
@@ -297,7 +297,7 @@ _Response_
 
 _Request_
 ```http
-POST http://<site>/api/v1/auth/login
+POST http://api/auth/login
 ```
 
 _Body_
@@ -332,7 +332,7 @@ _Response_
 
 _Request_
 ```http
-GET http://<site>/api/v1/home/roadmap
+GET http://api/home/roadmap
 Authorization: Bearer <token>
 ```
 
@@ -381,7 +381,7 @@ _Response_
 
 _Request_
 ```http
-GET http://<site>/api/v1/home/courses
+GET http://api/home/courses
 Authorization: Bearer <token>
 ```
 
@@ -419,7 +419,7 @@ _Response_
 
 _Request_
 ```http
-POST http://<site>/api/v1/home/courses
+POST http://api/home/courses
 Authorization: Bearer <token>
 ```
 
@@ -443,7 +443,7 @@ _Response_
 
 _Request_
 ```http
-DELETE http://<site>/api/v1/home/courses
+DELETE http://api/home/courses
 Authorization: Bearer <token>
 ```
 
@@ -467,7 +467,7 @@ _Response_
 
 _Request_
 ```http
-PUT http://<site>/api/v1/home/lessos/begin
+PUT http://api/home/lessos/begin
 Authorization: Bearer <token>
 ```
 
@@ -546,7 +546,7 @@ _Response_
 
 _Request_
 ```http
-PUT http://<site>/api/v1/home/lesson/done
+PUT http://api/home/lesson/done
 Authorization: Bearer <token>
 ```
 
@@ -576,7 +576,7 @@ _Response_
 
 _Request_
 ```http
-GET http://<site>/api/v1/profile
+GET http://api/profile
 Authorization: Bearer <token>
 ```
 
@@ -598,7 +598,7 @@ _Response_
 
 _Request_
 ```http
-PUT http://<site>/api/v1/profile
+PUT http://api/profile
 Authorization: Bearer <token>
 ```
 
@@ -638,7 +638,7 @@ _Response_
 
 _Request_
 ```http
-GET http://<site>/api/v1/profile/achivements
+GET http://api/profile/achivements
 Authorization: Bearer <token>
 ```
 
@@ -664,7 +664,7 @@ _Response_
 
 _Request_
 ```http
-POST http://<site>/api/v1/profile/achivements
+POST http://api/profile/achivements
 Authorization: Bearer <token>
 ```
 
@@ -696,7 +696,7 @@ _Response_
 **Список всех пользователей**
 
 ```http
-GET http://<site>/api/v1/users
+GET http://api/users
 Authorization: Bearer <token>
 ```
 
@@ -722,7 +722,7 @@ _Response_
 **обновление fcmToken**
 
 ```http
-PUT http://<site>/api/v1/users/device
+PUT http://api/users/device
 Authorization: Bearer <token>
 ```
 
@@ -744,7 +744,7 @@ _Response_
 **Отправка сообщения**
 
 ```http
-PUT http://<site>/api/v1/users/message
+PUT http://api/users/message
 Authorization: Bearer <token>
 ```
 
@@ -777,7 +777,6 @@ _Response_
 ## 4.2. `lib/core/`
 
 `lib/core/` - Папка с глобальными вещами, хранящая в себе:
-- `assets/` - папка для изображений
 - `shared_widgets/` - папка для общих виджетов, доступных на любом кране
 - `router.dart` - файл с маршрутами и экранами, к которым они ведут
 - `storage.dart` - файл хранящий логику работы с SecureStorage
@@ -800,3 +799,6 @@ _Response_
 - `view/` - папка для хранения представления(view) экрана(ов). Может хранить в себе несколько представлений, в случае когда экран может состоять из нескольких. Так же хранит в себе файл с экспортом представления
 - `widget/` - папка с виджетами, которые используются на экране. Может хранить в себе дополнительные папки, если экран состоит из нескольких. Так же хранит в себе файл с экспортом виджетов
 - `foo.dart` - файл, одноименный названию экрана. Служит для его экспорта
+
+## 4.5. `assets/`
+- `assets/` - папка в корне проекта, хранящая в себе дополнительные ассеты(изображения)
